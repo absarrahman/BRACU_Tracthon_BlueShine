@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "994942049304",
+    "firebase_url": "https://bracu-hackathon.firebaseio.com",
+    "project_id": "bracu-hackathon",
+    "storage_bucket": "bracu-hackathon.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:994942049304:android:1b9be35919ed78c35c376d",
+        "android_client_info": {
+          "package_name": "com.blueshine.bracu_tracthon"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "994942049304-01mm57dl1l0jb5v053n0pq5lvmv5qppp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAd32pjpVEOo0-9SSAtQvUZ50EiZ48ZyAM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "994942049304-01mm57dl1l0jb5v053n0pq5lvmv5qppp.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
