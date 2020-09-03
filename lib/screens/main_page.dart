@@ -6,6 +6,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MainPage extends StatefulWidget {
   final FirebaseUser mFirebaseUser;
@@ -40,7 +41,7 @@ class _MainPageState extends State<MainPage> {
         body: TabBarView(
           children: <Widget>[
             ReportPage(),
-            _reportView(),
+            EmergencyCallPage(),
             AccountProfilePage(),
           ],
         ),
@@ -124,21 +125,62 @@ class _MainPageState extends State<MainPage> {
   }
 }
 
+class EmergencyCallPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Column(
+        children: <Widget>[
+          _callButton("National Emergency Service", "999"),
+          _callButton("Covid 19 support", "333"),
+          _callButton("violence against women and children helpline", "999"),
+        ],
+      ),
+    );
+  }
+
+  Widget _callButton(String title, String number) {
+    return Container(
+      alignment: Alignment.center,
+      child: ButtonTheme(
+        minWidth: 130.0,
+        height: 50.0,
+        child: RaisedButton(
+          child: Text(
+            title,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.0,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          onPressed: () => launch("tel:$number"),
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18.0),
+        ),
+        buttonColor: Colors.blue,
+      ),
+    );
+  }
+}
+
+
+
+
 class AccountProfilePage extends StatefulWidget {
   @override
   _AccountProfilePageState createState() => _AccountProfilePageState();
 }
 
 class _AccountProfilePageState extends State<AccountProfilePage> {
-
   Text input;
 
   _AccountProfilePageState() {
-    inputText().then((onValue)=> setState((){
-      input = onValue;
-    }));
+    inputText().then((onValue) => setState(() {
+          input = onValue;
+        }));
   }
-  
 
   @override
   Widget build(BuildContext context) {
@@ -173,10 +215,11 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     );
   }
 
-  Future<Widget> inputText () async {
+  Future<Widget> inputText() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final uid = user.uid;
-    final DocumentSnapshot documentSnapshot = await Firestore.instance.collection("Users").document(uid).get();
+    final DocumentSnapshot documentSnapshot =
+        await Firestore.instance.collection("Users").document(uid).get();
     final list = documentSnapshot.data;
     return Text("${list["first_name"]}");
   }
@@ -184,26 +227,27 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   fetchData() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final uid = user.uid;
-    final DocumentSnapshot documentSnapshot = await Firestore.instance.collection("Users").document(uid).get();
+    final DocumentSnapshot documentSnapshot =
+        await Firestore.instance.collection("Users").document(uid).get();
     final list = documentSnapshot.data;
 
-    showModalBottomSheet(context: context, builder: (context) {
-      return Container(
-        color: Color(0xff737373),
-        height: 350,
-        child: Container(
-          decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-              )
-          ),
-          child: buildDetails(list),
-        ),
-      );
-    });
-
+    showModalBottomSheet(
+        context: context,
+        builder: (context) {
+          return Container(
+            color: Color(0xff737373),
+            height: 350,
+            child: Container(
+              decoration: BoxDecoration(
+                  color: Theme.of(context).canvasColor,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                  )),
+              child: buildDetails(list),
+            ),
+          );
+        });
   }
 
   Column buildDetails(Map<String, dynamic> list) {

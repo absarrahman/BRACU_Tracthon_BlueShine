@@ -13,7 +13,6 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-
   @override
   void initState() {
     super.initState();
@@ -52,13 +51,11 @@ class _MyAppState extends State<MyApp> {
     );
   }
 
-  Widget loading(){
+  Widget loading() {
     return Scaffold(
       body: Container(
-        child: SpinKitRing(color:Colors.blue),
+        child: SpinKitRing(color: Colors.blue),
       ),
     );
   }
-
 }
-

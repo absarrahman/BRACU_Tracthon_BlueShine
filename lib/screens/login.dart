@@ -5,7 +5,6 @@ import 'package:bracu_tracthon/screens/main_page.dart';
 import 'package:bracu_tracthon/screens/register_account.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoginPage extends StatefulWidget {
   @override

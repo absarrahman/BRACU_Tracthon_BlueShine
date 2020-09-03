@@ -12,7 +12,14 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  String _firstName, _lastName, _address, _area, _city, _zipCode, _birthday;
+  String _firstName,
+      _lastName,
+      _address,
+      _area,
+      _city,
+      _zipCode,
+      _birthday,
+      _nId;
   var screenHeight, screenWidth;
   DateTime _dateTime;
 
@@ -99,82 +106,95 @@ class _RegisterPageState extends State<RegisterPage> {
                     elevation: 10,
                     child: Form(
                       key: _formKey,
-                      child: Column(
-                        children: <Widget>[
-                          SizedBox(
-                            height: screenHeight * 0.06,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              inputField("First Name", 0.28),
-                              inputField("Last Name", 0.28),
-                            ],
-                          ),
-                          SizedBox(
-                            height: screenHeight * 0.027,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+                              height: screenHeight * 0.06,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
-                                Text("Select your birthday:"),
-                                InkWell(
-                                  onTap: () => {
-                                    showDatePicker(
-                                      context: context,
-                                      initialDate: DateTime.now(),
-                                      firstDate: DateTime(1950),
-                                      lastDate: DateTime.now(),
-                                    ).then((onValue) {
-                                      _dateTime = onValue;
-                                      _birthday = _dateTime.toString();
-                                    })
-                                  },
-                                  child: Text(
-                                    "Tap here",
-                                    style: TextStyle(
-                                      color: Colors.blue,
-                                    ),
-                                  ),
-                                ),
+                                inputField("First Name", 0.28),
+                                inputField("Last Name", 0.28),
                               ],
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                  left: 20.0, top: 10.0, right: 20.0),
-                              child: inputField("Street Address", 0.65),
+                            SizedBox(
+                              height: screenHeight * 0.027,
                             ),
-                          ),
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Padding(
-                              padding: const EdgeInsets.only(
-                                left: 20.0,
-                                top: 10.0,
-                                right: 20.0,
+                            Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Text("Select your birthday:"),
+                                  InkWell(
+                                    onTap: () => {
+                                      showDatePicker(
+                                        context: context,
+                                        initialDate: DateTime.now(),
+                                        firstDate: DateTime(1950),
+                                        lastDate: DateTime.now(),
+                                      ).then((onValue) {
+                                        _dateTime = onValue;
+                                        _birthday = _dateTime.toString();
+                                      })
+                                    },
+                                    child: Text(
+                                      "Tap here",
+                                      style: TextStyle(
+                                        color: Colors.blue,
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              child: inputField("Area", 0.65),
                             ),
-                          ),
-                          SizedBox(
-                            height: screenHeight * 0.027,
-                          ),
-                          Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: <Widget>[
-                              inputField("City", 0.28),
-                              inputField("Zip", 0.28),
-                            ],
-                          )
-                        ],
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20.0, top: 10.0, right: 20.0),
+                                child: inputField("Street Address", 0.65),
+                              ),
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  left: 20.0,
+                                  top: 10.0,
+                                  right: 20.0,
+                                ),
+                                child: inputField("Area", 0.65),
+                              ),
+                            ),
+                            SizedBox(
+                              height: screenHeight * 0.027,
+                            ),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              children: <Widget>[
+                                inputField("City", 0.28),
+                                inputField("Zip", 0.28),
+                              ],
+                            ),
+                            SizedBox(
+                              height: screenHeight * 0.027,
+                            ),
+                            Align(
+                              alignment: Alignment.centerLeft,
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 20.0, top: 10.0, right: 20.0),
+                                child: inputField("National ID", 0.65),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -210,6 +230,8 @@ class _RegisterPageState extends State<RegisterPage> {
             this._area = value;
           } else if (type == "City") {
             this._city = value;
+          } else if (type == "National ID") {
+            this._nId = value;
           } else {
             this._zipCode = value;
           }
@@ -233,7 +255,7 @@ class _RegisterPageState extends State<RegisterPage> {
     }
   }
 
-  String validateFields (String value) {
+  String validateFields(String value) {
     if (value.length == 0) {
       return "You cannot keep this field blank";
     }
@@ -246,16 +268,16 @@ class _RegisterPageState extends State<RegisterPage> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              RegisterUserPage(
-                firstName: _firstName,
-                lastName: _lastName,
-                address: _address,
-                area: _area,
-                city: _city,
-                birthday: _birthday,
-                zipCode: _zipCode,
-              ),
+          builder: (context) => RegisterUserPage(
+            firstName: _firstName,
+            lastName: _lastName,
+            address: _address,
+            area: _area,
+            city: _city,
+            birthday: _birthday,
+            zipCode: _zipCode,
+            nId: _nId,
+          ),
         ),
       );
     }
@@ -263,7 +285,7 @@ class _RegisterPageState extends State<RegisterPage> {
 }
 
 class RegisterUserPage extends StatefulWidget {
-  final String firstName, lastName, address, area, city, zipCode, birthday;
+  final String firstName, lastName, address, area, city, zipCode, birthday, nId;
 
   const RegisterUserPage(
       {Key key,
@@ -273,7 +295,8 @@ class RegisterUserPage extends StatefulWidget {
       this.area,
       this.city,
       this.zipCode,
-      this.birthday})
+      this.birthday,
+      this.nId})
       : super(key: key);
 
   @override
@@ -430,7 +453,9 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
       ),
       child: TextFormField(
         validator: type == "Email" ? validateEmail : validatePassword,
-        obscureText: ((type == "Password")||(type == "Confirm Password"))?true:false,
+        obscureText: ((type == "Password") || (type == "Confirm Password"))
+            ? true
+            : false,
         onSaved: (String value) {
           if (type == "Email") {
             this.email = value;
@@ -471,7 +496,8 @@ class _RegisterUserPageState extends State<RegisterUserPage> {
                     widget.city,
                     widget.zipCode,
                     widget.birthday,
-                    email)
+                    email,
+                    widget.nId)
                 .toJson())
             .catchError((e) {
           debugPrint(e.toString());
