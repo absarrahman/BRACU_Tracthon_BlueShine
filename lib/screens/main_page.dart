@@ -131,9 +131,18 @@ class EmergencyCallPage extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          _callButton("National Emergency Service", "999"),
-          _callButton("Covid 19 support", "333"),
-          _callButton("violence against women and children helpline", "999"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _callButton("National Emergency Service", "999"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _callButton("Covid 19 support", "333"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _callButton("violence against women and children helpline", "999"),
+          ),
         ],
       ),
     );
@@ -368,7 +377,7 @@ class _ReportPageState extends State<ReportPage> {
                         width: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.orange,
+                         // color: Colors.orange,
                         ),
                       ),
                       Container(
