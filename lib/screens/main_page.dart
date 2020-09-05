@@ -1,6 +1,8 @@
 import 'dart:io';
 
+import 'package:bracu_tracthon/screens/change_password.dart';
 import 'package:bracu_tracthon/screens/login.dart';
+import 'package:bracu_tracthon/screens/maps.dart';
 import 'package:bracu_tracthon/screens/post_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -60,15 +62,6 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  Widget _reportView() {
-    return Container(
-      child: InkWell(
-        child: Text("Hello"),
-        onTap: () => logOutPopDialogue(),
-      ),
-    );
-  }
-
   Tab buildTab(String tabName, IconData iconData) {
     return Tab(
       child: Column(
@@ -76,50 +69,6 @@ class _MainPageState extends State<MainPage> {
           Icon(iconData),
           Text(tabName),
         ],
-      ),
-    );
-  }
-
-  logOutPopDialogue() {
-    return showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(
-            Radius.circular(20),
-          ),
-        ),
-        title: Text(
-          "Kiree",
-          textAlign: TextAlign.center,
-        ),
-        content: Text(
-          "Do you really want to log out?",
-        ),
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "No",
-            ),
-            onPressed: () => Navigator.pop(context),
-          ),
-          FlatButton(
-            child: Text(
-              "Yes",
-            ),
-            onPressed: () => logOut(),
-          )
-        ],
-      ),
-    );
-  }
-
-  logOut() {
-    FirebaseAuth.instance.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginPage(),
       ),
     );
   }
@@ -141,7 +90,33 @@ class EmergencyCallPage extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: _callButton("violence against women and children helpline", "999"),
+            child: _callButton(
+                "violence against women and children helpline", "999"),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              alignment: Alignment.center,
+              child: ButtonTheme(
+                minWidth: 130.0,
+                height: 50.0,
+                child: RaisedButton(
+                  child: Text(
+                    "HELP ME",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 20.0,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>MapsPage())),
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18.0),
+                ),
+                buttonColor: Colors.red,
+              ),
+            ),
           ),
         ],
       ),
@@ -174,20 +149,22 @@ class EmergencyCallPage extends StatelessWidget {
   }
 }
 
-
-
-
 class AccountProfilePage extends StatefulWidget {
   @override
   _AccountProfilePageState createState() => _AccountProfilePageState();
 }
 
 class _AccountProfilePageState extends State<AccountProfilePage> {
-  Text input;
+  Widget viewName;
+
+  FirebaseUser mUser;
 
   _AccountProfilePageState() {
-    inputText().then((onValue) => setState(() {
-          input = onValue;
+    nameView().then((onValue) => setState(() {
+          viewName = onValue;
+        }));
+    getFirebaseUser().then((onValue) => setState(() {
+          mUser = onValue;
         }));
   }
 
@@ -195,6 +172,77 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: CircleAvatar(
+            radius: 30,
+            child: Container(
+              child: Icon(Icons.account_circle, size: 50),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            child: viewName,
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: ButtonTheme(
+            minWidth: 20,
+            height: 50,
+            child: FlatButton.icon(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30.0),
+                side: BorderSide(color: Colors.blue),
+              ),
+              color: Colors.blue,
+              onPressed: () => fetchData(),
+              icon: Icon(
+                Icons.info,
+                color: Colors.white,
+              ),
+              label: Text(
+                "Details",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            alignment: Alignment.center,
+            child: ButtonTheme(
+              minWidth: 130.0,
+              height: 50.0,
+              child: RaisedButton(
+                child: Text(
+                  "Change password",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 20.0,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ChangePasswordPage(),
+                  ),
+                ),
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(18.0),
+              ),
+              buttonColor: Colors.blue,
+            ),
+          ),
+        ),
         Container(
           alignment: Alignment.center,
           child: ButtonTheme(
@@ -202,14 +250,14 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
             height: 50.0,
             child: RaisedButton(
               child: Text(
-                "Post",
+                "Log out",
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
                 ),
                 textAlign: TextAlign.center,
               ),
-              onPressed: () => fetchData(),
+              onPressed: () => logOutPopDialogue(),
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18.0),
@@ -217,20 +265,82 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
             buttonColor: Colors.blue,
           ),
         ),
-        Container(
-          child: input,
-        ),
       ],
     );
   }
 
-  Future<Widget> inputText() async {
+  logOutPopDialogue() {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        title: Text(
+          "Sheba 24/7",
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          "Do you really want to log out?",
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "No",
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          FlatButton(
+            child: Text(
+              "Yes",
+            ),
+            onPressed: () => logOut(),
+          )
+        ],
+      ),
+    );
+  }
+
+  logOut() {
+    FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginPage(),
+      ),
+    );
+  }
+
+  Future<FirebaseUser> getFirebaseUser() async {
+    return await FirebaseAuth.instance.currentUser();
+  }
+
+  Future<Widget> nameView() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     final uid = user.uid;
     final DocumentSnapshot documentSnapshot =
         await Firestore.instance.collection("Users").document(uid).get();
     final list = documentSnapshot.data;
-    return Text("${list["first_name"]}");
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text(
+          "${list["first_name"]}",
+          style: TextStyle(fontSize: 20),
+        ),
+        SizedBox(
+          width: 5,
+        ),
+        Text(
+          "${list["last_name"]}",
+          style: TextStyle(
+            fontSize: 20,
+          ),
+        )
+      ],
+    );
   }
 
   fetchData() async {
@@ -377,7 +487,7 @@ class _ReportPageState extends State<ReportPage> {
                         width: 60,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                         // color: Colors.orange,
+                          // color: Colors.orange,
                         ),
                       ),
                       Container(

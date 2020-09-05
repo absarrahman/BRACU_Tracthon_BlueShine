@@ -1,15 +1,15 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-class ForgetPasswordPage extends StatefulWidget {
+class ChangePasswordPage extends StatefulWidget {
   @override
-  _ForgetPasswordPageState createState() => _ForgetPasswordPageState();
+  _ChangePasswordPageState createState() => _ChangePasswordPageState();
 }
 
-class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
   var screenHeight, screenWidth;
 
-  String _email;
+  String _currentPassword, _newPassword;
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -43,7 +43,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   child: Column(
                     children: <Widget>[
                       Text(
-                        "Forget Password",
+                        "Change Password",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 30,
@@ -53,7 +53,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                         height: screenHeight * 0.05,
                       ),
                       Text(
-                        "Type your mail to reset password",
+                        "Type your old password for confirmation",
                         style: TextStyle(
                           color: Colors.grey,
                           fontSize: 19,
@@ -95,7 +95,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                           ),
                           textAlign: TextAlign.center,
                         ),
-                        onPressed: () => _forgetPassword(),
+                        onPressed: () => _changePassword(),
                       ),
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
@@ -105,11 +105,11 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                   ),
                 ),
                 Positioned(
-                  top: screenHeight * 0.3,
+                  top: screenHeight * 0.25,
                   child: Container(
                     child: TextFormField(
-                      validator: validateEmail,
-                      onSaved: (String value) => _email = value,
+                      validator: validatePassword,
+                      onSaved: (String value) => _currentPassword = value,
                       textAlign: TextAlign.center,
                       decoration: InputDecoration(
                         border: OutlineInputBorder(
@@ -117,7 +117,27 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
                             const Radius.circular(10.0),
                           ),
                         ),
-                        hintText: "Email address",
+                        hintText: "Current password",
+                        hintStyle: TextStyle(color: Colors.grey),
+                      ),
+                    ),
+                    width: screenWidth * 0.8,
+                  ),
+                ),
+                Positioned(
+                  top: screenHeight/2.9,
+                  child: Container(
+                    child: TextFormField(
+                      validator: validatePassword,
+                      onSaved: (String value) => _newPassword = value,
+                      textAlign: TextAlign.center,
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius: const BorderRadius.all(
+                            const Radius.circular(10.0),
+                          ),
+                        ),
+                        hintText: "New password",
                         hintStyle: TextStyle(color: Colors.grey),
                       ),
                     ),
@@ -132,23 +152,35 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
     );
   }
 
-  String validateEmail(String value) {
-    if (value.contains("@")) {
+  String validatePassword(String value) {
+    if (value.length >= 8) {
       return null;
     }
-    return "Invalid email";
+    return "Password length should be at least\n 8 characters";
   }
-
-  _forgetPassword() {
+  _changePassword() async {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      FirebaseAuth.instance.sendPasswordResetEmail(email: _email);
-      Scaffold.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Check your mail for resetting password"),
-        ),
+      FirebaseUser firebaseUser = await FirebaseAuth.instance.currentUser();
+
+      AuthCredential authCredential = EmailAuthProvider.getCredential(
+        email: firebaseUser.email,
+        password: _currentPassword,
       );
+
+      firebaseUser.reauthenticateWithCredential(authCredential).then((onValue) {
+        onValue.user.updatePassword(_newPassword).then((data){
+          Scaffold.of(context).showSnackBar(
+            SnackBar(
+              content: Text("Password updated successfully"),
+            ),
+          );
+          Navigator.pop(context);
+
+        }).catchError((e)=>print(e.message));
+      });
     }
-    Navigator.pop(context);
   }
+
 }
+

@@ -127,7 +127,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      onPressed: () => _createPost(),
+                      onPressed: () => postPopDialogue(),
                     ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18.0),
@@ -139,6 +139,40 @@ class _CreatePostPageState extends State<CreatePostPage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  postPopDialogue() {
+    return showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(
+            Radius.circular(20),
+          ),
+        ),
+        title: Text(
+          "Sheba 24/7",
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          "Are you ready to report? If you post fake report, you will end up with severe punishment.",
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "No",
+            ),
+            onPressed: () => Navigator.pop(context),
+          ),
+          FlatButton(
+            child: Text(
+              "Yes",
+            ),
+            onPressed: () => _createPost(),
+          )
+        ],
       ),
     );
   }

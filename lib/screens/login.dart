@@ -29,145 +29,152 @@ class _LoginPageState extends State<LoginPage> {
       ),
       body: Form(
         key: _formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Container(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.email),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.grey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                height: 200,
+                width: 200,
+                child: Image.asset("assets/sheba.png"),
+              ),
+              Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.email),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                          ),
                         ),
                       ),
-                    ),
-                    child: TextFormField(
-                      validator: validateEmail,
-                      onSaved: (String value) => _email = value,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Email address",
-                        hintStyle: TextStyle(color: Colors.grey),
-                      ),
-                    ),
-                    width: 250,
-                  ),
-                ],
-              ),
-            ),
-            Container(
-              child: Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Icon(Icons.vpn_key),
-                  SizedBox(
-                    width: 20,
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.grey,
+                      child: TextFormField(
+                        validator: validateEmail,
+                        onSaved: (String value) => _email = value,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Email address",
+                          hintStyle: TextStyle(color: Colors.grey),
                         ),
                       ),
+                      width: 250,
                     ),
-                    child: TextFormField(
-                      validator: validatePassword,
-                      obscureText: true,
-                      onSaved: (String value) => _password = value,
-                      textAlign: TextAlign.center,
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: "Password",
-                        hintStyle: TextStyle(color: Colors.grey),
+                  ],
+                ),
+              ),
+              Container(
+                child: Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Icon(Icons.vpn_key),
+                    SizedBox(
+                      width: 20,
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        border: Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                          ),
+                        ),
                       ),
+                      child: TextFormField(
+                        validator: validatePassword,
+                        obscureText: true,
+                        onSaved: (String value) => _password = value,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          hintText: "Password",
+                          hintStyle: TextStyle(color: Colors.grey),
+                        ),
+                      ),
+                      width: 250,
                     ),
-                    width: 250,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(
-              height: screenHeight * 0.05,
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: ButtonTheme(
-                minWidth: 130.0,
-                height: 50.0,
-                child: RaisedButton(
-                  child: Text(
-                    "Log in",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  onPressed: () => _signIn(context),
-                ),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(18.0),
-                ),
-                buttonColor: Colors.blue,
-              ),
-            ),
-            SizedBox(
-              height: screenHeight * 0.05,
-            ),
-            Container(
-              child: InkWell(
-                child: Text(
-                  "Forget password",
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ForgetPasswordPage(),
-                  ),
+                  ],
                 ),
               ),
-            ),
-            SizedBox(
-              height: screenHeight * 0.08,
-            ),
-            Container(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  Text("Need an account?"),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  InkWell(
+              SizedBox(
+                height: screenHeight * 0.05,
+              ),
+              Container(
+                alignment: Alignment.center,
+                child: ButtonTheme(
+                  minWidth: 130.0,
+                  height: 50.0,
+                  child: RaisedButton(
                     child: Text(
-                      "Register",
+                      "Log in",
                       style: TextStyle(
-                        color: Colors.blue,
-                        fontWeight: FontWeight.bold,
-                        decoration: TextDecoration.underline,
+                        color: Colors.white,
+                        fontSize: 20.0,
                       ),
+                      textAlign: TextAlign.center,
                     ),
-                    onTap: () => _registerPage(),
+                    onPressed: () => _signIn(context),
                   ),
-                ],
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(18.0),
+                  ),
+                  buttonColor: Colors.blue,
+                ),
               ),
-            )
-          ],
+              SizedBox(
+                height: screenHeight * 0.05,
+              ),
+              Container(
+                child: InkWell(
+                  child: Text(
+                    "Forget password",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      decoration: TextDecoration.underline,
+                    ),
+                  ),
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ForgetPasswordPage(),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: screenHeight * 0.08,
+              ),
+              Container(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Need an account?"),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    InkWell(
+                      child: Text(
+                        "Register",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                      onTap: () => _registerPage(),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
@@ -224,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             title: Text(
-              "Emergency App",
+              "Sheba 24/7",
               textAlign: TextAlign.center,
             ),
             content: Text(
